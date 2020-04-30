@@ -1,14 +1,13 @@
-import threading
-import re
-
-from flask_classy import FlaskView, route
-from core.web.helpers import requires_role
-from flask import render_template, redirect, request, flash
-import psutil
 import subprocess
+import threading
+
+import psutil
+from flask import render_template, redirect, request, flash
+from flask_classy import FlaskView, route
 
 from core.config.celeryctl import celery_app
 from core.scheduling import ScheduleEntry
+from core.web.helpers import requires_role
 
 
 class Inspector(threading.Thread):
@@ -116,7 +115,7 @@ class SystemView(FlaskView):
                 active[key] = {
                     "running": [
                         ScheduleEntry.objects.get(
-                            id=re.sub(r"[^0-9a-f]", "", i['args']))
+                            id=i['args'][0])
                         for i in results["active"][key]
                     ],
                 }
